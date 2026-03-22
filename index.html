@@ -13,12 +13,15 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: var(--dr-navy); margin: 0; overflow-x: hidden; }
         
+        /* Reveal Logic */
         .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
+        /* Navigation Style */
         .menu-link { transition: color 0.3s ease, transform 0.3s ease; }
         .menu-link:hover { color: var(--dr-gold); transform: translateX(12px); }
 
+        /* Hero Config */
         .hero-master {
             position: relative;
             background-image: linear-gradient(to right, rgba(10, 15, 26, 0.95) 0%, rgba(10, 15, 26, 0.4) 60%, rgba(10, 15, 26, 0.9) 100%),
@@ -26,6 +29,7 @@
             background-size: cover; background-position: center; min-height: 90vh; display: flex; align-items: center;
         }
 
+        /* Component Styles */
         .btn-toumbano { padding: 1.1rem 2.8rem; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-gold { background: var(--dr-gold); color: var(--dr-navy) !important; box-shadow: 0 15px 30px rgba(244, 180, 0, 0.25); }
         .btn-outline { border: 2px solid #ffffff; color: #ffffff !important; background: rgba(255, 255, 255, 0.05); }
@@ -36,10 +40,11 @@
         .property-card { border-radius: 35px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); background: #fff; transition: 0.4s; }
         .property-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.12); }
 
+        /* Label Pulse */
         .label-new { background: var(--dr-blue); color: white; padding: 4px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; animation: pulse-light 2s infinite; }
         @keyframes pulse-light { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); } }
 
-        /* --- ARROWS --- */
+        /* Gallery Nav */
         .gallery-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
             width: 50px; height: 50px; background: rgba(255,255,255,0.9);
@@ -49,7 +54,6 @@
         .arrow-prev { left: 15px; }
         .arrow-next { right: 15px; }
         
-        /* --- BULLETS --- */
         .bullet { width: 8px; height: 8px; border-radius: 50%; transition: all 0.3s ease; }
         .bullet-active { background: var(--dr-gold); width: 24px; border-radius: 10px; }
         .bullet-inactive { background: rgba(0,0,0,0.1); }
@@ -65,8 +69,16 @@
         'ZH01': { title: 'Zamora Studio', ref: 'DR-ZH01', price: '₱12,500', isNew: true, images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200'] },
         'EV02': { title: 'Elite Loft', ref: 'DR-EV02', price: '₱25,000', isNew: false, images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200'] }
     },
-    openGallery(id) { this.activeRoom = this.rooms[id]; this.currentIndex = 0; this.galleryOpen = true; document.body.style.overflow = 'hidden'; },
-    closeGallery() { this.galleryOpen = false; document.body.style.overflow = 'auto'; },
+    openGallery(id) { 
+        this.activeRoom = this.rooms[id]; 
+        this.currentIndex = 0; 
+        this.galleryOpen = true; 
+        document.body.style.overflow = 'hidden'; 
+    },
+    closeGallery() { 
+        this.galleryOpen = false; 
+        document.body.style.overflow = 'auto'; 
+    },
     next() { this.currentIndex = (this.currentIndex + 1) % this.activeRoom.images.length; },
     prev() { this.currentIndex = (this.currentIndex - 1 + this.activeRoom.images.length) % this.activeRoom.images.length; }
 }" x-init="
@@ -78,7 +90,7 @@
         <a href="#"><img src="img/logo.png" class="w-32 md:w-48 h-auto" alt="Logo"></a>
         <button @click="navOpen = true" class="flex flex-col gap-[6px] p-2 focus:outline-none">
             <span class="w-8 h-[2px] bg-black"></span>
-            <span class="w-6 h-[2px] bg-black"></span>
+            <span class="w-8 h-[2px] bg-black"></span>
             <span class="w-8 h-[2px] bg-black"></span>
         </button>
     </nav>
@@ -96,7 +108,7 @@
     <section class="hero-master px-8 lg:px-24">
         <div class="max-w-4xl reveal">
             <div class="mb-8 flex items-center gap-4">
-                <div class="h-px w-12 bg-dr-gold"></div>
+                <div class="h-px w-12 bg-dr-gold shadow-lg shadow-dr-gold/50"></div>
                 <span class="text-white font-bold text-xs uppercase tracking-[0.4em]">Active Portfolio • 2026</span>
             </div>
             <h1 style="font-family: 'Space Grotesk';" class="text-6xl md:text-[120px] font-bold text-white leading-[0.85] tracking-tighter mb-12">
@@ -123,7 +135,7 @@
                 <div class="grid grid-cols-1 gap-10">
                     <div class="feature-card-light reveal" style="transition-delay: 0.1s">
                         <div class="flex items-start gap-6">
-                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                             </div>
                             <div>
@@ -134,7 +146,7 @@
                     </div>
                     <div class="feature-card-light reveal" style="transition-delay: 0.2s">
                         <div class="flex items-start gap-6">
-                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001m-6 0h6"/></svg>
                             </div>
                             <div>
@@ -222,7 +234,7 @@
                         </div>
                         <div class="text-right">
                             <span class="text-5xl font-black text-dr-blue block tracking-tighter" x-text="activeRoom.price"></span>
-                            <a href="https://m.me/61579766783613" target="_blank" class="bg-black text-white mt-4 py-3 px-8 rounded-xl font-bold uppercase text-[10px] tracking-widest inline-block">Inquire Now</a>
+                            <a href="https://m.me/61579766783613" target="_blank" class="bg-black text-white mt-4 py-3 px-8 rounded-xl font-bold uppercase text-[10px] tracking-widest inline-block shadow-lg">Inquire Now</a>
                         </div>
                     </div>
                 </div>
@@ -232,6 +244,10 @@
 
     <footer class="py-20 px-8 border-t border-slate-100 flex flex-col items-center text-center bg-white">
         <img src="img/logo.png" class="w-40 h-auto mb-8 grayscale opacity-20">
+        <div class="flex gap-10 mb-12 text-[10px] font-bold uppercase tracking-widest opacity-40">
+            <a href="https://www.facebook.com/profile.php?id=61579766783613" target="_blank">Facebook</a>
+            <a href="#" target="_blank">Instagram</a>
+        </div>
         <p class="text-[9px] font-bold opacity-10 uppercase tracking-widest">© 2026 Drimi Residences Philippines</p>
     </footer>
 
