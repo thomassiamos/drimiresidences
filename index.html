@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drimi Residences | Premier Philippine Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root { --dr-navy: #0a0f1a; --dr-gold: #f4b400; --dr-blue: #2563eb; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: var(--dr-navy); margin: 0; overflow-x: hidden; }
+        
+        /* --- REVEAL ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- THEMATIC HOVER --- */
+        .menu-link { transition: color 0.3s ease, transform 0.3s ease; }
+        .menu-link:hover { color: var(--dr-gold); transform: translateX(12px); }
+
+        /* --- HERO --- */
+        .hero-master {
+            position: relative;
+            background-image: linear-gradient(to right, rgba(10, 15, 26, 0.95) 0%, rgba(10, 15, 26, 0.4) 60%, rgba(10, 15, 26, 0.9) 100%),
+                              url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920');
+            background-size: cover; background-position: center; min-height: 90vh; display: flex; align-items: center;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-toumbano { padding: 1.1rem 2.8rem; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-gold { background: var(--dr-gold); color: var(--dr-navy) !important; box-shadow: 0 15px 30px rgba(244, 180, 0, 0.25); }
+        .btn-outline { border: 2px solid #ffffff; color: #ffffff !important; background: rgba(255, 255, 255, 0.05); }
+
+        /* --- CARDS --- */
+        .feature-card-dark { background: var(--dr-navy); color: white; border-radius: 40px; padding: 4rem; position: relative; overflow: hidden; height: 100%; }
+        .feature-card-light { background: #f8fafc; border-radius: 40px; padding: 3rem; border: 1px solid rgba(0,0,0,0.05); }
+        .property-card { border-radius: 35px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); background: #fff; transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
+        .property-card:hover { transform: translateY(-12px); box-shadow: 0 40px 80px -20px rgba(0,0,0,0.15); }
+
+        /* --- NEW LABEL PULSE --- */
+        .label-new { background: var(--dr-blue); color: white; padding: 4px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; animation: pulse-light 2s infinite; }
+        @keyframes pulse-light { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); } }
+
+        /* --- FIXED GALLERY UI --- */
+        .gallery-arrow {
+            position: absolute; top: 0; bottom: 0; width: 80px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0); transition: all 0.3s ease;
+            color: var(--dr-navy); z-index: 800;
+        }
+        .gallery-arrow:hover { background: rgba(0,0,0,0.03); color: var(--dr-gold); }
+        .arrow-prev { left: 0; }
+        .arrow-next { right: 0; }
+
+        [x-cloak] { display: none !important; }
+        .messenger-pulse { animation: pulse-blue 2s infinite; }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(37, 119, 241, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(37, 119, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 119, 241, 0); } }
+    </style>
+</head>
+<body x-data="{ 
+    navOpen: false, galleryOpen: false, activeRoom: null, currentIndex: 0,
+    rooms: {
+        'ZH01': { title: 'Zamora Studio', ref: 'DR-ZH01', price: '₱12,500', isNew: true, images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200'] },
+        'EV02': { title: 'Elite Loft', ref: 'DR-EV02', price: '₱25,000', isNew: false, images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200'] }
+    },
+    openGallery(id) { this.activeRoom = this.rooms[id]; this.currentIndex = 0; this.galleryOpen = true; document.body.style.overflow = 'hidden'; },
+    closeGallery() { this.galleryOpen = false; document.body.style.overflow = 'auto'; }
+}" x-init="
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active') }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+">
+
+    <nav class="fixed w-full z-[100] bg-white border-b border-slate-100 py-4 px-8 lg:px-20 flex justify-between items-center">
+        <a href="#"><img src="img/logo.png" class="w-32 md:w-48 h-auto" alt="Logo"></a>
+        <button @click="navOpen = true" class="flex flex-col gap-[6px] p-2 focus:outline-none">
+            <span class="w-8 h-[2px] bg-black"></span>
+            <span class="w-8 h-[2px] bg-black"></span>
+            <span class="w-8 h-[2px] bg-black"></span>
+        </button>
+    </nav>
+
+    <div x-show="navOpen" x-cloak class="fixed inset-0 z-[500] bg-slate-950 flex flex-col items-center justify-center text-white space-y-12">
+        <button @click="navOpen = false" class="absolute top-10 right-10 text-white hover:text-dr-gold">
+            <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="#portfolio" @click="navOpen = false" class="menu-link text-6xl font-bold uppercase tracking-tighter">Portfolio</a>
+        <a href="#why" @click="navOpen = false" class="menu-link text-6xl font-bold uppercase tracking-tighter">Why Us</a>
+        <div class="h-px w-24 bg-white/20"></div>
+        <a href="https://m.me/61579766783613" @click="navOpen = false" class="menu-link text-xl font-bold text-dr-gold uppercase tracking-widest">Talks with Agent</a>
+    </div>
+
+    <section class="hero-master px-8 lg:px-24">
+        <div class="max-w-4xl reveal">
+            <div class="mb-8 flex items-center gap-4">
+                <div class="h-px w-12 bg-dr-gold shadow-lg shadow-dr-gold/50"></div>
+                <span class="text-white font-bold text-xs uppercase tracking-[0.4em]">Active Portfolio • 2026</span>
+            </div>
+            <h1 style="font-family: 'Space Grotesk';" class="text-6xl md:text-[120px] font-bold text-white leading-[0.85] tracking-tighter mb-12">
+                Live the <br> <span class="text-dr-gold italic">Dream.</span>
+            </h1>
+            <div class="flex flex-col sm:flex-row gap-6">
+                <a href="#portfolio" class="btn-toumbano btn-gold">Show Listings</a>
+                <a href="https://m.me/61579766783613" target="_blank" class="btn-toumbano btn-outline">Talks with Agent</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="why" class="py-24 px-8 lg:px-24 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-16 reveal">Why <span class="text-dr-blue">Drimi?</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="feature-card-dark reveal">
+                    <div class="w-16 h-16 bg-dr-gold rounded-2xl flex items-center justify-center mb-10 shadow-2xl shadow-dr-gold/40">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0a0f1a" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3 class="text-4xl font-bold uppercase tracking-tighter mb-8 leading-tight">Safety First.</h3>
+                    <p class="text-slate-400 text-lg leading-relaxed max-w-sm">Exclusive girls-only student housing with 24/7 biometric security. Safe ka at kampante ang parents mo.</p>
+                </div>
+                <div class="grid grid-cols-1 gap-10">
+                    <div class="feature-card-light reveal" style="transition-delay: 0.1s">
+                        <div class="flex items-start gap-6">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold uppercase tracking-tight mb-3">Fast Response</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed font-medium">Quick repairs and hands-on maintenance for a smooth stay.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-card-light reveal" style="transition-delay: 0.2s">
+                        <div class="flex items-start gap-6">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001m-6 0h6"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold uppercase tracking-tight mb-3">Comfortable Homes</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed font-medium">Curated spaces designed for peace of mind and accessibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-24 px-8 lg:px-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl font-bold uppercase tracking-tighter mb-16 border-b border-slate-200 pb-10 reveal">Properties</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="property-card reveal">
+                    <div class="relative aspect-[4/5] cursor-pointer overflow-hidden" @click="openGallery('ZH01')">
+                        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                        <div class="absolute top-6 left-6"><span class="label-new">New Listing</span></div>
+                        <div class="absolute top-6 right-6"><span class="bg-black/40 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1 rounded uppercase">DR-ZH01</span></div>
+                    </div>
+                    <div class="p-10">
+                        <div class="flex justify-between items-baseline mb-8">
+                            <h4 class="text-2xl font-bold uppercase tracking-tight">Zamora Studio</h4>
+                            <span class="text-dr-blue font-bold text-2xl">₱12,500</span>
+                        </div>
+                        <button @click="openGallery('ZH01')" class="w-full text-center border-2 border-dr-navy py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-dr-navy hover:text-white transition-all">View Gallery</button>
+                    </div>
+                </div>
+                <div class="property-card reveal" style="transition-delay: 0.1s">
+                    <div class="relative aspect-[4/5] cursor-pointer overflow-hidden" @click="openGallery('EV02')">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                        <div class="absolute top-6 right-6"><span class="bg-black/40 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1 rounded uppercase">DR-EV02</span></div>
+                    </div>
+                    <div class="p-10">
+                        <div class="flex justify-between items-baseline mb-8">
+                            <h4 class="text-2xl font-bold uppercase tracking-tight">Elite Loft</h4>
+                            <span class="text-dr-blue font-bold text-2xl">₱25,000</span>
+                        </div>
+                        <button @click="openGallery('EV02')" class="w-full text-center border-2 border-dr-navy py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-dr-navy hover:text-white transition-all">View Gallery</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div x-show="galleryOpen" x-cloak class="fixed inset-0 z-[600] bg-white flex items-center justify-center">
+        <button @click="closeGallery()" class="absolute top-8 right-8 text-dr-navy opacity-30 hover:opacity-100 z-[900]">
+            <svg width="45" height="45" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <div class="w-full h-full relative flex flex-col items-center justify-center">
+            <template x-if="activeRoom">
+                <div class="w-full h-full flex flex-col">
+                    
+                    <div class="relative flex-grow flex items-center justify-center">
+                        <button @click="currentIndex = (currentIndex - 1 + activeRoom.images.length) % activeRoom.images.length" class="gallery-arrow arrow-prev">
+                            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+
+                        <img :src="activeRoom.images[currentIndex]" class="max-h-[85vh] max-w-[80vw] object-contain rounded-2xl shadow-2xl transition-all duration-300">
+
+                        <button @click="currentIndex = (currentIndex + 1) % activeRoom.images.length" class="gallery-arrow arrow-next">
+                            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="w-full bg-white border-t border-slate-100 p-8 flex flex-col md:flex-row justify-between items-end text-dr-navy">
+                        <div>
+                            <h3 class="text-3xl font-extrabold uppercase" x-text="activeRoom.title"></h3>
+                            <p class="text-[10px] font-bold opacity-30 tracking-[0.2em] mt-1" x-text="'REF: ' + activeRoom.ref"></p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-5xl font-black text-dr-blue block tracking-tighter" x-text="activeRoom.price"></span>
+                            <a href="https://m.me/61579766783613" target="_blank" class="bg-black text-white mt-4 py-3 px-8 rounded-xl font-bold uppercase text-[10px] tracking-widest inline-block">Inquire Now</a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <footer class="py-24 px-8 border-t border-slate-100 flex flex-col items-center text-center bg-white">
+        <img src="img/logo.png" class="w-44 h-auto mb-10 grayscale opacity-20">
+        <div class="flex gap-12 mb-16 text-[10px] font-bold uppercase tracking-widest opacity-40">
+            <a href="https://www.facebook.com/profile.php?id=61579766783613" target="_blank" class="hover:text-dr-navy transition">Facebook</a>
+            <a href="#" target="_blank" class="hover:text-dr-navy transition">Instagram</a>
+        </div>
+        <p class="text-[9px] font-bold opacity-10 uppercase">© 2026 Drimi Residences Philippines</p>
+    </footer>
+
+    <a href="https://m.me/61579766783613" target="_blank" class="fixed bottom-10 right-10 z-[150] messenger-pulse rounded-full">
+        <div class="bg-white p-5 rounded-full shadow-2xl border-4 border-[#2577F1]">
+            <img src="https://images.icon-icons.com/3132/PNG/512/facebook_messenger_social_network_social_media_network_icon_192268.png" class="w-12 h-12" alt="Messenger">
+        </div>
+    </a>
+
+</body>
+</html>
