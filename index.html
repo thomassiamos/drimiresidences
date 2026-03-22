@@ -13,15 +13,12 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: var(--dr-navy); margin: 0; overflow-x: hidden; }
         
-        /* --- REVEAL ANIMATIONS --- */
         .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- THEMATIC MENU --- */
         .menu-link { transition: color 0.3s ease, transform 0.3s ease; }
         .menu-link:hover { color: var(--dr-gold); transform: translateX(12px); }
 
-        /* --- HERO --- */
         .hero-master {
             position: relative;
             background-image: linear-gradient(to right, rgba(10, 15, 26, 0.95) 0%, rgba(10, 15, 26, 0.4) 60%, rgba(10, 15, 26, 0.9) 100%),
@@ -29,38 +26,33 @@
             background-size: cover; background-position: center; min-height: 90vh; display: flex; align-items: center;
         }
 
-        /* --- BUTTONS --- */
         .btn-toumbano { padding: 1.1rem 2.8rem; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-gold { background: var(--dr-gold); color: var(--dr-navy) !important; box-shadow: 0 15px 30px rgba(244, 180, 0, 0.25); }
         .btn-outline { border: 2px solid #ffffff; color: #ffffff !important; background: rgba(255, 255, 255, 0.05); }
 
-        /* --- UI CARDS --- */
-        .feature-card-dark { background: var(--dr-navy); color: white; border-radius: 40px; padding: 3rem; position: relative; overflow: hidden; }
+        .feature-card-dark { background: var(--dr-navy); color: white; border-radius: 40px; padding: 3rem; }
         .feature-card-light { background: #f8fafc; border-radius: 40px; padding: 2.5rem; border: 1px solid rgba(0,0,0,0.05); }
+        
         .property-card { border-radius: 35px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); background: #fff; transition: 0.4s; }
         .property-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.12); }
 
-        /* --- NEW LABEL PULSE --- */
         .label-new { background: var(--dr-blue); color: white; padding: 4px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; animation: pulse-light 2s infinite; }
         @keyframes pulse-light { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); } }
 
-        /* --- IMPROVED GALLERY ARROWS --- */
+        /* --- ARROWS --- */
         .gallery-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
-            width: 45px; height: 45px; background: rgba(255,255,255,0.9);
+            width: 50px; height: 50px; background: rgba(255,255,255,0.9);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             color: var(--dr-navy); z-index: 800; transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .gallery-arrow:hover { background: var(--dr-gold); color: white; }
         .arrow-prev { left: 15px; }
         .arrow-next { right: 15px; }
         
-        @media (max-width: 768px) {
-            .gallery-arrow { width: 35px; height: 35px; background: rgba(255,255,255,0.6); }
-            .arrow-prev { left: 8px; }
-            .arrow-next { right: 8px; }
-        }
+        /* --- BULLETS --- */
+        .bullet { width: 8px; height: 8px; border-radius: 50%; transition: all 0.3s ease; }
+        .bullet-active { background: var(--dr-gold); width: 24px; border-radius: 10px; }
+        .bullet-inactive { background: rgba(0,0,0,0.1); }
 
         [x-cloak] { display: none !important; }
         .messenger-pulse { animation: pulse-blue 2s infinite; }
@@ -70,8 +62,8 @@
 <body x-data="{ 
     navOpen: false, galleryOpen: false, activeRoom: null, currentIndex: 0,
     rooms: {
-        'ZH01': { title: 'Zamora Studio', ref: 'DR-ZH01', price: '₱12,500', isNew: true, images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200'] },
-        'EV02': { title: 'Elite Loft', ref: 'DR-EV02', price: '₱25,000', isNew: false, images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200'] }
+        'ZH01': { title: 'Zamora Studio', ref: 'DR-ZH01', price: '₱12,500', isNew: true, images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200'] },
+        'EV02': { title: 'Elite Loft', ref: 'DR-EV02', price: '₱25,000', isNew: false, images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200', 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200'] }
     },
     openGallery(id) { this.activeRoom = this.rooms[id]; this.currentIndex = 0; this.galleryOpen = true; document.body.style.overflow = 'hidden'; },
     closeGallery() { this.galleryOpen = false; document.body.style.overflow = 'auto'; },
@@ -91,7 +83,7 @@
         </button>
     </nav>
 
-    <div x-show="navOpen" x-cloak class="fixed inset-0 z-[500] bg-slate-950 flex flex-col items-center justify-center text-white space-y-12 transition-all">
+    <div x-show="navOpen" x-cloak class="fixed inset-0 z-[500] bg-slate-950 flex flex-col items-center justify-center text-white space-y-12">
         <button @click="navOpen = false" class="absolute top-10 right-10 text-white hover:text-dr-gold">
             <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -125,13 +117,13 @@
                     <div class="w-16 h-16 bg-dr-gold rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-dr-gold/30">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0a0f1a" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <h3 class="text-4xl font-bold uppercase tracking-tighter mb-6 leading-tight">Safety First.</h3>
-                    <p class="text-slate-400 text-lg leading-relaxed max-w-sm">Exclusive girls-only student housing with 24/7 security. Safe ka at kampante ang parents mo.</p>
+                    <h3 class="text-4xl font-bold uppercase tracking-tighter mb-8 leading-tight">Safety First.</h3>
+                    <p class="text-slate-400 text-lg leading-relaxed max-w-sm">Exclusive girls-only housing with 24/7 security. Safe ka at kampante ang parents mo.</p>
                 </div>
                 <div class="grid grid-cols-1 gap-10">
                     <div class="feature-card-light reveal" style="transition-delay: 0.1s">
                         <div class="flex items-start gap-6">
-                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                             </div>
                             <div>
@@ -142,7 +134,7 @@
                     </div>
                     <div class="feature-card-light reveal" style="transition-delay: 0.2s">
                         <div class="flex items-start gap-6">
-                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue shadow-sm">
+                            <div class="shrink-0 w-14 h-14 bg-white rounded-2xl flex items-center justify-center border border-slate-100 text-dr-blue">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001m-6 0h6"/></svg>
                             </div>
                             <div>
@@ -204,13 +196,21 @@
             <template x-if="activeRoom">
                 <div class="w-full h-full flex flex-col">
                     <div class="relative flex-grow flex items-center justify-center overflow-hidden">
-                        <button @click="prev()" class="gallery-arrow arrow-prev">
+                        <button @click="prev()" class="gallery-arrow arrow-prev hidden md:flex">
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
                         </button>
 
-                        <img :src="activeRoom.images[currentIndex]" class="max-h-[80vh] max-w-[85vw] object-contain rounded-2xl shadow-2xl transition-all duration-300">
+                        <div class="relative w-full h-full flex items-center justify-center px-4">
+                            <img :src="activeRoom.images[currentIndex]" class="max-h-[75vh] max-w-full object-contain rounded-2xl shadow-2xl transition-all duration-300">
+                            
+                            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                                <template x-for="(img, index) in activeRoom.images" :key="index">
+                                    <div class="bullet" :class="index === currentIndex ? 'bullet-active' : 'bullet-inactive'"></div>
+                                </template>
+                            </div>
+                        </div>
 
-                        <button @click="next()" class="gallery-arrow arrow-next">
+                        <button @click="next()" class="gallery-arrow arrow-next hidden md:flex">
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </button>
                     </div>
@@ -230,12 +230,8 @@
         </div>
     </div>
 
-    <footer class="py-20 px-8 border-t border-slate-100 flex flex-col items-center text-center">
+    <footer class="py-20 px-8 border-t border-slate-100 flex flex-col items-center text-center bg-white">
         <img src="img/logo.png" class="w-40 h-auto mb-8 grayscale opacity-20">
-        <div class="flex gap-10 mb-12 text-[10px] font-bold uppercase tracking-widest opacity-40">
-            <a href="https://www.facebook.com/profile.php?id=61579766783613" target="_blank">Facebook</a>
-            <a href="#" target="_blank">Instagram</a>
-        </div>
         <p class="text-[9px] font-bold opacity-10 uppercase tracking-widest">© 2026 Drimi Residences Philippines</p>
     </footer>
 
